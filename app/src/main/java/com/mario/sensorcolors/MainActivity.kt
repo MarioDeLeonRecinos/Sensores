@@ -17,7 +17,7 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
     private lateinit var sensorManager: SensorManager
     private var accSensor: Sensor? = null
     private var proxSensor: Sensor? = null
-
+    private var rotSensor: Sensor? = null
     private var x: Int = 0
     private var y: Int = 0
     private var z: Int = 0
@@ -33,10 +33,11 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
 
         accSensor = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER)
         proxSensor = sensorManager.getDefaultSensor(Sensor.TYPE_PROXIMITY)
+        rotSensor =  sensorManager.getDefaultSensor(Sensor.TYPE_GYROSCOPE)
 
         sensorManager.registerListener(this, accSensor, SensorManager.SENSOR_DELAY_NORMAL)
         sensorManager.registerListener(this, proxSensor, SensorManager.SENSOR_DELAY_NORMAL)
-
+        sensorManager.registerListener(this, rotSensor, SensorManager.SENSOR_DELAY_NORMAL)
     }
 
     override fun onAccuracyChanged(sensor: Sensor, accuracy: Int) {
@@ -76,6 +77,28 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
                 z = event.values[2].toInt()
             }
 
+            if(event.sensor.type == Sensor.TYPE_GYROSCOPE){
+                xValue.text = event.values[0].toString()
+                yValue.text = event.values[1].toString()
+                zValue.text = event.values[2].toString()
+
+                if(event.values[2] > 0.5f){
+                    linearlayout.setBackgroundColor(Color.BLUE)
+                } else if(event.values[2] < -0.5f) {
+                    linearlayout.setBackgroundColor(Color.YELLOW)
+                }
+                if(event.values[1] > 0.5f){
+                    linearlayout.setBackgroundColor(Color.WHITE)
+                } else if(event.values[1] < -0.5f) {
+                    linearlayout.setBackgroundColor(Color.BLACK)
+                }
+                if(event.values[0] > 0.5f){
+                    linearlayout.setBackgroundColor(Color.RED)
+                } else if(event.values[0] < -0.5f) {
+                    linearlayout.setBackgroundColor(Color.CYAN)
+                }
+            }
+
         }
     }
 
@@ -83,12 +106,14 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
         super.onResume()
         sensorManager.registerListener(this, accSensor, SensorManager.SENSOR_DELAY_NORMAL)
         sensorManager.registerListener(this, proxSensor, SensorManager.SENSOR_DELAY_NORMAL)
+        sensorManager.registerListener(this, rotSensor, SensorManager.SENSOR_DELAY_NORMAL)
     }
 
     override fun onPause() {
         super.onPause()
         sensorManager.unregisterListener(this,accSensor)
         sensorManager.unregisterListener(this,proxSensor)
+        sensorManager.unregisterListener(this,rotSensor)
     }
 
 }
