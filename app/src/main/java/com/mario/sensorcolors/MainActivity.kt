@@ -53,28 +53,11 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
 
             if (nx.plus(x)>nx.plus(5)) {
                 linearlayout.setBackgroundColor(Color.DKGRAY)
-                Log.d(TAG, "nx "+nx.plus(10)+" x "+x)
             }
-            if (nx.minus(x)<nx.minus(5)) {
+            if (nx.plus(x)<nx.minus(5)) {
                 linearlayout.setBackgroundColor(Color.MAGENTA)
-                Log.d(TAG, "nx "+nx.minus(10)+" x "+x)
             }
-            if (ny.plus(y)>ny.plus(5)) {
-                linearlayout.setBackgroundColor(Color.RED)
-                Log.d(TAG, "nz "+ny.plus(10)+" y "+y)
-            }
-            if (ny.minus(y)<ny.minus(5)) {
-                linearlayout.setBackgroundColor(Color.BLUE)
-                Log.d(TAG, "ny "+ny.minus(10)+" y "+y)
-            }
-            if (nz.plus(z)>nz.plus(5)) {
-                linearlayout.setBackgroundColor(Color.GREEN)
-                Log.d(TAG, "nz "+nz.plus(10)+" z "+z)
-            }
-            if (nz.minus(z)<nz.minus(5)) {
-                linearlayout.setBackgroundColor(Color.CYAN)
-                Log.d(TAG, "nz "+nz.minus(10)+" z "+z)
-            }
+
             x = event.values[0].toInt()
             y = event.values[1].toInt()
             z = event.values[2].toInt()
