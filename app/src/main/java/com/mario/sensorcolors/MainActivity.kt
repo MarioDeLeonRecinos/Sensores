@@ -9,14 +9,15 @@ import android.hardware.SensorManager
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
-import android.widget.TextView
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity(), SensorEventListener {
 
     private val TAG: String? = "MainActivity"
     private lateinit var sensorManager: SensorManager
-    private var mSensor: Sensor? = null
+    private var accSensor: Sensor? = null
+    private var lightSensor: Sensor? = null
+
     private var x: Int = 0
     private var y: Int = 0
     private var z: Int = 0
@@ -30,9 +31,10 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
 
         sensorManager = getSystemService(Context.SENSOR_SERVICE) as SensorManager
 
-        mSensor = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER)
+        accSensor = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER)
+        lightSensor = sensorManager.getDefaultSensor(Sensor.TYPE_LIGHT)
 
-        sensorManager.registerListener(this, mSensor, SensorManager.SENSOR_DELAY_NORMAL)
+        sensorManager.registerListener(this, accSensor, SensorManager.SENSOR_DELAY_NORMAL)
 
     }
 
@@ -42,25 +44,36 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
 
     override fun onSensorChanged(event: SensorEvent?) {
         if (event != null) {
+            //no he podido implementar con el sensro de luz
+            /*if (event.sensor.type.equals(Sensor.TYPE_LIGHT)) {
 
-            xValue.text = event.values[0].toString()
-            yValue.text = event.values[1].toString()
-            zValue.text = event.values[2].toString()
+                if (event.values[0] > 10) {
+                    linearlayout.setBackgroundColor(Color.GREEN)
+                    Log.d(TAG,"light"+event.values[0])
+                }
 
-            nx = event.values[0].toInt()
-            ny = event.values[1].toInt()
-            nz = event.values[2].toInt()
+            } else {*/
 
-            if (nx.plus(x)>nx.plus(5)) {
-                linearlayout.setBackgroundColor(Color.DKGRAY)
+                xValue.text = event.values[0].toString()
+                yValue.text = event.values[1].toString()
+                zValue.text = event.values[2].toString()
+
+                nx = event.values[0].toInt()
+                ny = event.values[1].toInt()
+                nz = event.values[2].toInt()
+
+                if (nx.plus(x) > nx.plus(5)) {
+                    linearlayout.setBackgroundColor(Color.DKGRAY)
+                }
+                if (nx.plus(x) < nx.minus(5)) {
+                    linearlayout.setBackgroundColor(Color.MAGENTA)
+                }
+
+                x = event.values[0].toInt()
+                y = event.values[1].toInt()
+                z = event.values[2].toInt()
             }
-            if (nx.plus(x)<nx.minus(5)) {
-                linearlayout.setBackgroundColor(Color.MAGENTA)
-            }
 
-            x = event.values[0].toInt()
-            y = event.values[1].toInt()
-            z = event.values[2].toInt()
-        }
+        //}
     }
 }
