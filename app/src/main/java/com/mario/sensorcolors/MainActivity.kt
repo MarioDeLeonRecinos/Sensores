@@ -16,7 +16,7 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
     private val TAG: String? = "MainActivity"
     private lateinit var sensorManager: SensorManager
     private var accSensor: Sensor? = null
-    private var lightSensor: Sensor? = null
+    private var proxSensor: Sensor? = null
 
     private var x: Int = 0
     private var y: Int = 0
@@ -32,9 +32,10 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
         sensorManager = getSystemService(Context.SENSOR_SERVICE) as SensorManager
 
         accSensor = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER)
-        lightSensor = sensorManager.getDefaultSensor(Sensor.TYPE_LIGHT)
+        proxSensor = sensorManager.getDefaultSensor(Sensor.TYPE_PROXIMITY)
 
         sensorManager.registerListener(this, accSensor, SensorManager.SENSOR_DELAY_NORMAL)
+        sensorManager.registerListener(this,proxSensor,SensorManager.SENSOR_DELAY_NORMAL)
 
     }
 
@@ -45,14 +46,14 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
     override fun onSensorChanged(event: SensorEvent?) {
         if (event != null) {
             //no he podido implementar con el sensro de luz
-            /*if (event.sensor.type.equals(Sensor.TYPE_LIGHT)) {
+            if (event.sensor.type==Sensor.TYPE_PROXIMITY) {
 
-                if (event.values[0] > 10) {
+                if (event.values[0] < 0.5) {
                     linearlayout.setBackgroundColor(Color.GREEN)
                     Log.d(TAG,"light"+event.values[0])
                 }
 
-            } else {*/
+            } else {
 
                 xValue.text = event.values[0].toString()
                 yValue.text = event.values[1].toString()
@@ -74,6 +75,17 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
                 z = event.values[2].toInt()
             }
 
-        //}
+        }
     }
+    override fun onResume() {
+        super.onResume()
+        sensorManager.registerListener(this, accSensor, SensorManager.SENSOR_DELAY_NORMAL)
+        sensorManager.registerListener(this,proxSensor,SensorManager.SENSOR_DELAY_NORMAL)
+    }
+
+    override fun onPause() {
+        super.onPause()
+        sensorManager.unregisterListener(this)
+    }
+
 }
