@@ -35,7 +35,7 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
         proxSensor = sensorManager.getDefaultSensor(Sensor.TYPE_PROXIMITY)
 
         sensorManager.registerListener(this, accSensor, SensorManager.SENSOR_DELAY_NORMAL)
-        sensorManager.registerListener(this,proxSensor,SensorManager.SENSOR_DELAY_NORMAL)
+        sensorManager.registerListener(this, proxSensor, SensorManager.SENSOR_DELAY_NORMAL)
 
     }
 
@@ -46,14 +46,15 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
     override fun onSensorChanged(event: SensorEvent?) {
         if (event != null) {
             //no he podido implementar con el sensro de luz
-            if (event.sensor.type==Sensor.TYPE_PROXIMITY) {
+            if (event.sensor.type == Sensor.TYPE_PROXIMITY) {
 
                 if (event.values[0] < 0.5) {
                     linearlayout.setBackgroundColor(Color.GREEN)
-                    Log.d(TAG,"light"+event.values[0])
+                    Log.d(TAG, "light" + event.values[0])
                 }
 
-            } else {
+            }
+            if (event.sensor.type == Sensor.TYPE_ACCELEROMETER) {
 
                 xValue.text = event.values[0].toString()
                 yValue.text = event.values[1].toString()
@@ -77,10 +78,11 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
 
         }
     }
+
     override fun onResume() {
         super.onResume()
         sensorManager.registerListener(this, accSensor, SensorManager.SENSOR_DELAY_NORMAL)
-        sensorManager.registerListener(this,proxSensor,SensorManager.SENSOR_DELAY_NORMAL)
+        sensorManager.registerListener(this, proxSensor, SensorManager.SENSOR_DELAY_NORMAL)
     }
 
     override fun onPause() {
